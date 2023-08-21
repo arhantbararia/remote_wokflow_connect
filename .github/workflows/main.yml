@@ -1,9 +1,9 @@
-name: Connect and Create File
+name: Deploy to Lightsail
 
 on:
   push:
     branches:
-      - main  # Change this to your repository's main branch
+      - main
   workflow_dispatch:
 
 jobs:
@@ -11,20 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up SSH key
-      run: |
-        mkdir .ssh
-        echo "$SSH_PRIVATE_KEY" > .ssh/key_pair1.pem
-        chmod 400 .ssh/key_pair1.pem
-        ssh-keyscan -t rsa "$SSH_PUBLIC_IP" >> .ssh/known_hosts
-    - name: Create directory and file remotely
-      run: |
-        ssh -o StrictHostKeyChecking=no -i .ssh/key_pair1.pem "$SSH_USERNAME"@"$SSH_PUBLIC_IP" 'mkdir -p "pearl thoughts" && echo "Hello Pearl Thoughts" > "pearl thoughts/Hello.txt"'
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-        SSH_PUBLIC_IP: ${{ secrets.SSH_PUBLIC_IP }}
-        
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa "${{ secrets.SSH_PUBLIC_IP }}" >> ~/.ssh/known_hosts
+
+      - name: Connect to Lightsail instance and create directory
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USERNAME }}"@"${{ secrets.SSH_PUBLIC_IP }}" 'mkdir -p ~/pearl\ thoughts'
+
+      
