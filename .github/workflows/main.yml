@@ -23,6 +23,6 @@ jobs:
 
       - name: Connect to Lightsail instance and create directory
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USERNAME }}"@"${{ secrets.SSH_PUBLIC_IP }}" 'mkdir -p ~/pearl\ thoughts'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USERNAME }}"@"${{ secrets.SSH_PUBLIC_IP }}" 'mkdir -p "pearl thoughts" && echo "Hello Pearl Thoughts" > "pearl thoughts/Hello.txt"'
 
       
