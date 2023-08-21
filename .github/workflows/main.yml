@@ -1,0 +1,26 @@
+name: Connect and Create File
+
+on:
+  push:
+    branches:
+      - main  # Change this to your repository's main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH key
+      run: echo "$SSH_PRIVATE_KEY" > ssh_private_key.pem && chmod 600 ssh_private_key.pem
+
+    - name: Create directory and file remotely
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ssh_private_key.pem "$SSH_USERNAME"@"$SSH_PUBLIC_IP" 'mkdir -p "pearl thoughts" && echo "Hello Pearl Thoughts" > "pearl thoughts/Hello.txt"'
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+        SSH_PUBLIC_IP: ${{ secrests.SSH_PUBLIC_IP }}
+        
