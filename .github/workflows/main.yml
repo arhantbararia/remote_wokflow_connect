@@ -16,8 +16,8 @@ jobs:
 
     - name: Set up SSH key
       run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/key_pair1
+        mkdir .ssh
+        echo "$SSH_PRIVATE_KEY" > .ssh/key_pair1
         chmod 600 ~/.ssh/key_pair1
         ssh-keyscan -t rsa "$SSH_PUBLIC_IP" >> ~/.ssh/known_hosts
     - name: Create directory and file remotely
