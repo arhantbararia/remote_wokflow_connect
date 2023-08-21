@@ -15,10 +15,13 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up SSH key
-      run: echo "$SSH_PRIVATE_KEY" > ssh_private_key.pem && chmod 400 ssh_private_key.pem
-
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/key_pair1
+        chmod 600 ~/.ssh/key_pair1
+        ssh-keyscan -t rsa "$SSH_PUBLIC_IP" >> ~/.ssh/known_hosts
     - name: Create directory and file remotely
-      run: 
+      run: |
         ssh -o StrictHostKeyChecking=no -i ssh_private_key.pem "$SSH_USERNAME"@"$SSH_PUBLIC_IP" 'mkdir -p "pearl thoughts" && echo "Hello Pearl Thoughts" > "pearl thoughts/Hello.txt"'
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
