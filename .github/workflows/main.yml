@@ -23,5 +23,5 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-        SSH_PUBLIC_IP: ${{ secrests.SSH_PUBLIC_IP }}
+        SSH_PUBLIC_IP: ${{ secrets.SSH_PUBLIC_IP }}
         
